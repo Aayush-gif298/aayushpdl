@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy New Year 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    position: relative;
+  }
+
+  svg {
+    width: 80%;
+    height: 50%;
+    position: relative;
+    z-index: 2;
+  }
+
+  text {
+    fill: #f9e2b2;
+    font-size: 5em;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .balloon {
+    position: absolute;
+    width: 50px;
+    height: 70px;
+    background: red;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    bottom: -80px;
+    opacity: 0.8;
+    animation: rise 6s linear infinite;
+  }
+
+  .balloon::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 40px;
+    background: white;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-120vh) rotate(360deg); }
+  }
+
+  .confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #f9e2b2;
+    top: 0;
+    animation: fall 4s linear infinite;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity:1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+  }
+
+  .lights {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    top: 0;
+    display: flex;
+    justify-content: space-around;
+    z-index: 1;
+  }
+
+  .light {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: yellow;
+    animation: blink 1s infinite alternate;
+  }
+
+  @keyframes blink {
+    0% { opacity: 0.2; }
+    100% { opacity: 1; }
+  }
+
+  .photo-placeholder {
+    position: absolute;
+    bottom: 20px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #f9e2b2;
+    background: center/cover no-repeat;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+  }
+
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 1000 200">
+  <text id="text" x="50%" y="50%">Happy New Year 2026</text>
+</svg>
+
+<div class="lights">
+  <div class="light"></div>
+  <div class="light"></div>
+  <div class="light"></div>
+  <div class="light"></div>
+  <div class="light"></div>
+  <div class="light"></div>
+</div>
+
+<div class="photo-placeholder"></div>
+
+<script>
+  const messages = ["Happy", "New", "Year", "2026!"];
+  const textElement = document.getElementById('text');
+  let i = 0;
+
+  function morphText() {
+    const current = textElement.textContent;
+    const next = messages[i];
+    let step = 0;
+    const steps = 20;
+
+    function animate() {
+      step++;
+      const progress = step / steps;
+      const len = Math.floor(current.length * (1 - progress) + next.length * progress);
+      textElement.textContent = next.slice(0, len);
+      if (step < steps) {
+        requestAnimationFrame(animate);
+      } else {
+        i++;
+        if(i < messages.length) {
+          setTimeout(morphText, 800);
+        } else {
+          // After final text show balloons, confetti, lights, and photo
+          spawnBalloons();
+          spawnConfetti();
+          const photo = document.querySelector('.photo-placeholder');
+          photo.style.backgroundImage = "url('anuska.jpeg')"; // insert your friend's photo
+          photo.style.opacity = 1;
+        }
+      }
+    }
+    animate();
+  }
+
+  morphText();
+
+  function spawnBalloons() {
+    const colors = ['#f94144', '#f3722c', '#f9c74f', '#90be6d', '#577590'];
+    for (let i = 0; i < 15; i++) {
+      const b = document.createElement('div');
+      b.classList.add('balloon');
+      b.style.left = Math.random() * window.innerWidth + 'px';
+      b.style.background = colors[Math.floor(Math.random()*colors.length)];
+      b.style.animationDuration = (5 + Math.random()*3) + 's';
+      document.body.appendChild(b);
+    }
+  }
+
+  function spawnConfetti() {
+    for (let i = 0; i < 50; i++) {
+      const c = document.createElement('div');
+      c.classList.add('confetti');
+      c.style.left = Math.random() * window.innerWidth + 'px';
+      c.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
+      c.style.animationDuration = (3 + Math.random()*2) + 's';
+      document.body.appendChild(c);
+    }
+  }
+
+</script>
+
+</body>
+</html>
